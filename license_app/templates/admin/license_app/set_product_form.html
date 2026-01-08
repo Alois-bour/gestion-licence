@@ -1,0 +1,41 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static %}
+
+{% block extrahead %}
+    {{ block.super }}
+    {{ media }}
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+    &rsaquo; <a href="{% url 'admin:license_app_license_changelist' %}">Licenses</a>
+    &rsaquo; Modifier le produit en masse
+</div>
+{% endblock %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+<p>Vous êtes sur le point de modifier le produit pour {{ queryset.count }} licence(s) :</p>
+
+<ul>
+    {% for obj in queryset %}
+        <li>{{ obj.license_number }} - {{ obj.customer }} (Produit actuel: {{ obj.product }})</li>
+    {% endfor %}
+</ul>
+
+<form method="post">
+    {% csrf_token %}
+    
+    {{ form.as_p }}
+    
+    {% for obj in queryset %}
+        <input type="hidden" name="{{ action_checkbox_name }}" value="{{ obj.pk }}" />
+    {% endfor %}
+    
+    <input type="hidden" name="action" value="set_product" />
+    <input type="submit" name="apply" value="Confirmer" class="default" />
+    <a href="{% url 'admin:license_app_license_changelist' %}" class="button cancel-link">Annuler</a>
+</form>
+{% endblock %}

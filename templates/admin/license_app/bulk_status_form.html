@@ -1,0 +1,149 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static %}
+
+{% block extrahead %}
+    {{ block.super }}
+    {{ media }}
+    <style>
+        .action-form {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .selected-items {
+            background: white;
+            padding: 15px;
+            border-left: 4px solid #417690;
+            margin: 15px 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .form-section {
+            background: white;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        .form-actions {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+        .button.submit {
+            background: #417690;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .button.submit:hover {
+            background: #2e5668;
+        }
+        .button.cancel-link {
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-block;
+            margin-left: 10px;
+        }
+        .status-badge {
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+        .status-active { background: #28a745; color: white; }
+        .status-expired { background: #dc3545; color: white; }
+        .status-suspended { background: #ffc107; color: black; }
+        .status-pending { background: #17a2b8; color: white; }
+    </style>
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Accueil' %}</a>
+    &rsaquo; <a href="{% url 'admin:license_app_license_changelist' %}">Licences</a>
+    &rsaquo; {{ title }}
+</div>
+{% endblock %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+<div class="action-form">
+    <div class="selected-items">
+        <h3>📋 Licences sélectionnées ({{ queryset.count }})</h3>
+        <ul>
+            {% for obj in queryset %}
+                <li>
+                    <strong>{{ obj.license_number }}</strong> - {{ obj.customer }} - 
+                    <span class="status-badge status-{{ obj.status|lower }}">{{ obj.get_status_display }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-section">
+            <h3>Modifier les informations de licence en masse</h3>
+
+            <div class="form-group">
+                <label for="id_new_product">Produit à définir</label>
+                {{ form.new_product }}
+            </div>
+
+            <div class="form-group">
+                <label for="id_action">Choisissez une action</label>
+                {{ form.action }}
+            </div>
+
+            <div class="form-group" id="expiry_date_group" style="display:none;">
+                <label for="id_expiry_date">Nouvelle date d'expiration</label>
+                {{ form.expiry_date }}
+            </div>
+
+            <div class="form-group" id="start_date_group" style="display:none;">
+                <label for="id_start_date">Nouvelle date de début</label>
+                {{ form.start_date }}
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="button submit" name="apply">Appliquer les modifications</button>
+                <a href="{% url 'admin:license_app_license_changelist' %}" class="button cancel-link">Annuler</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% block inline_scripts %}
+    <script>
+        const actionSelect = document.querySelector('[name="action"]');
+        const expiryDateGroup = document.getElementById('expiry_date_group');
+        const startDateGroup = document.getElementById('start_date_group');
+
+        // Fonction qui gère l'affichage dynamique des champs selon l'action choisie
+        actionSelect.addEventListener('change', function() {
+            const actionValue = actionSelect.value;
+
+            if (actionValue === 'set_expiry') {
+                expiryDateGroup.style.display = 'block';
+                startDateGroup.style.display = 'none';
+            } else if (actionValue === 'set_start') {
+                startDateGroup.style.display = 'block';
+                expiryDateGroup.style.display = 'none';
+            } else {
+                expiryDateGroup.style.display = 'none';
+                startDateGroup.style.display = 'none';
+            }
+        });
+    </script>
+{% endblock %}
+{% endblock %}

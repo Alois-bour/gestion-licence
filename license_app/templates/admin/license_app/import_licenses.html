@@ -1,0 +1,11 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static %}
+
+{% block content %}
+  <h1>Importation des Licences</h1>
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="button submit">Importer</button>
+  </form>
+{% endblock %}
