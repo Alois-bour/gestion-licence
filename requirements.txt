@@ -4,3 +4,4 @@ python-dotenv
 django-import-export
 pandas
 openpyxl
+django-simple-history
