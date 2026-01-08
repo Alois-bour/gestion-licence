@@ -5,11 +5,13 @@ from django.db import migrations, models
 
 
 def migrate_customer_data(apps, schema_editor):
-    License = apps.get_model('license_app', 'License')
-    Customer = apps.get_model('license_app', 'Customer')
+    License = apps.get_model("license_app", "License")
+    Customer = apps.get_model("license_app", "Customer")
 
     # Create customers from the old CharField
-    for customer_name in License.objects.values_list('customer_old', flat=True).distinct():
+    for customer_name in License.objects.values_list(
+        "customer_old", flat=True
+    ).distinct():
         if customer_name:
             Customer.objects.get_or_create(name=customer_name)
 
@@ -84,23 +86,32 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.RenameField(
-            model_name='license',
-            old_name='customer',
-            new_name='customer_old',
+            model_name="license",
+            old_name="customer",
+            new_name="customer_old",
         ),
         migrations.AddField(
-            model_name='license',
-            name='customer',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='license_app.customer', verbose_name="Client"),
+            model_name="license",
+            name="customer",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="license_app.customer",
+                verbose_name="Client",
+            ),
         ),
         migrations.RunPython(migrate_customer_data),
         migrations.RemoveField(
-            model_name='license',
-            name='customer_old',
+            model_name="license",
+            name="customer_old",
         ),
         migrations.AlterField(
-            model_name='license',
-            name='customer',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='license_app.customer', verbose_name="Client"),
+            model_name="license",
+            name="customer",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="license_app.customer",
+                verbose_name="Client",
+            ),
         ),
     ]

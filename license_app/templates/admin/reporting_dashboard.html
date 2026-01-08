@@ -1,0 +1,95 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<h1>Reporting Dashboard</h1>
+
+<style>
+    .report-section { margin-bottom: 40px; }
+    .report-table { width: 100%; border-collapse: collapse; }
+    .report-table th, .report-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    .report-table th { background-color: #f2f2f2; }
+    .summary-card { padding: 20px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 20px; }
+</style>
+
+<div class="report-section">
+    <h2>Synthèse exécutive</h2>
+    <div class="summary-card">
+        <h4>Points de vigilance</h4>
+        <ul>
+            <li><strong>{{ expired_licenses.count }}</strong> licences sont actuellement expirées.</li>
+            <li><strong>{{ expiring_in_30_days.count }}</strong> licences arriveront à échéance dans les 30 prochains jours.</li>
+        </ul>
+        <h4>Priorités d'action</h4>
+        <p>Il est recommandé de traiter en priorité le renouvellement des licences expirant dans les 30 prochains jours pour éviter toute interruption de service.</p>
+    </div>
+</div>
+
+<div class="report-section">
+    <h2>Récapitulatif par Éditeur</h2>
+    <table class="report-table">
+        <thead>
+            <tr>
+                <th>Éditeur</th>
+                <th>Total Licences</th>
+                <th>Actives</th>
+                <th>Expirées</th>
+                <th>Échéance < 90 jours</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for editor in editors_stats %}
+            <tr>
+                <td>{{ editor.name }}</td>
+                <td>{{ editor.total_licenses }}</td>
+                <td>{{ editor.active_licenses }}</td>
+                <td>{{ editor.expired_licenses }}</td>
+                <td>{{ editor.expiring_soon }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="report-section">
+    <h2>Analyse des Échéances</h2>
+    <table class="report-table">
+        <thead>
+            <tr><th>Statut</th><th>Nombre de Licences</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Expirées</td><td>{{ expired_licenses.count }}</td></tr>
+            <tr><td>Échéance < 30 jours</td><td>{{ expiring_in_30_days.count }}</td></tr>
+            <tr><td>Échéance entre 31 et 60 jours</td><td>{{ expiring_in_60_days.count }}</td></tr>
+            <tr><td>Échéance entre 61 et 90 jours</td><td>{{ expiring_in_90_days.count }}</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="report-section">
+    <h2>Répartition par Entité</h2>
+    <table class="report-table">
+        <thead>
+            <tr><th>Entité</th><th>Total Licences</th></tr>
+        </thead>
+        <tbody>
+            {% for entity in entities_stats %}
+            <tr><td>{{ entity.name }}</td><td>{{ entity.total_licenses }}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="report-section">
+    <h2>Répartition par Service</h2>
+    <table class="report-table">
+        <thead>
+            <tr><th>Service</th><th>Total Licences</th></tr>
+        </thead>
+        <tbody>
+            {% for service in services_stats %}
+            <tr><td>{{ service.name }}</td><td>{{ service.total_licenses }}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
