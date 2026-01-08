@@ -3,6 +3,30 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 from datetime import timedelta
 
+class ClientType(models.Model):
+    name = models.CharField(max_length=50, unique=True, verbose_name="Type de client")
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Type de client"
+        verbose_name_plural = "Types de clients"
+
+
+class Customer(models.Model):
+    name = models.CharField(max_length=150, unique=True, verbose_name="Nom")
+    email = models.EmailField(verbose_name="Email", blank=True, null=True)
+    client_type = models.ForeignKey(ClientType, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Type de client")
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Client"
+        verbose_name_plural = "Clients"
+
+
 class Product(models.Model):
     name = models.CharField(max_length=100, unique=True, verbose_name="Nom du produit")
     description = models.TextField(blank=True, null=True, verbose_name="Description")
@@ -24,7 +48,7 @@ class License(models.Model):
     ]
     
     license_number = models.CharField(max_length=64, unique=True, verbose_name="Numéro de licence")
-    customer = models.CharField(max_length=150, verbose_name="Client")
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, verbose_name="Client")
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Produit")
     start_date = models.DateField(null=True, blank=True, verbose_name="Date de début")
     expiry_date = models.DateField(null=True, blank=True, verbose_name="Date d'expiration")
