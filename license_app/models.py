@@ -1,7 +1,9 @@
 from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
 from datetime import timedelta
+from simple_history.models import HistoricalRecords
 
 class ClientType(models.Model):
     name = models.CharField(max_length=50, unique=True, verbose_name="Type de client")
@@ -18,6 +20,8 @@ class Customer(models.Model):
     name = models.CharField(max_length=150, unique=True, verbose_name="Nom")
     email = models.EmailField(verbose_name="Email", blank=True, null=True)
     client_type = models.ForeignKey(ClientType, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Type de client")
+    users = models.ManyToManyField(User, related_name='customers', blank=True, verbose_name="Utilisateurs associés")
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.name
@@ -56,6 +60,7 @@ class License(models.Model):
     comment = models.TextField(blank=True, null=True, verbose_name="Commentaire")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Date de création")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Dernière modification")
+    history = HistoricalRecords()
 
     class Meta:
         verbose_name = "Licence"

@@ -9,6 +9,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.utils.html import format_html
 
+from simple_history.admin import SimpleHistoryAdmin
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
@@ -187,7 +188,7 @@ export_selected_to_csv.short_description = "📥 Exporter en CSV"
 
 
 @admin.register(License)
-class LicenseAdmin(ImportExportModelAdmin):
+class LicenseAdmin(ImportExportModelAdmin, SimpleHistoryAdmin):
     resource_class = LicenseResource
 
     list_display = (
@@ -276,10 +277,11 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 @admin.register(Customer)
-class CustomerAdmin(admin.ModelAdmin):
+class CustomerAdmin(SimpleHistoryAdmin):
     list_display = ('name', 'email', 'client_type')
     search_fields = ('name', 'email')
     list_filter = ('client_type',)
+    filter_horizontal = ('users',)
 
 @admin.register(ClientType)
 class ClientTypeAdmin(admin.ModelAdmin):

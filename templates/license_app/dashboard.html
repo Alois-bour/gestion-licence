@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Mes Licences{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Mes Licences</h2>
+
+{% if licenses %}
+  <div class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>Produit</th>
+          <th>Numéro de Licence</th>
+          <th>Date de début</th>
+          <th>Date d'expiration</th>
+          <th>Statut</th>
+          <th>État</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for license in licenses %}
+          <tr>
+            <td>{{ license.product.name }}</td>
+            <td><code>{{ license.license_number }}</code></td>
+            <td>{{ license.start_date|date:"d/m/Y"|default:"-" }}</td>
+            <td>{{ license.expiry_date|date:"d/m/Y"|default:"-" }}</td>
+            <td>
+              <span class="badge
+                {% if license.status == 'active' %}bg-success
+                {% elif license.status == 'expired' %}bg-danger
+                {% elif license.status == 'suspended' %}bg-warning
+                {% else %}bg-secondary{% endif %}">
+                {{ license.get_status_display }}
+              </span>
+            </td>
+            <td>{{ license.expiry_status }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <div class="alert alert-info">
+    Aucune licence ne vous est actuellement attribuée.
+  </div>
+{% endif %}
+{% endblock %}
