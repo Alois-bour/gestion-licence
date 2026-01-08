@@ -14,7 +14,7 @@ from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
 from .models import License, Product, Customer, ClientType
-from .forms import BulkUpdateDatesForm, SetProductForm
+from .forms import BulkUpdateDatesForm, SetProductForm, BulkStatusForm
 
 
 class LicenseResource(resources.ModelResource):
@@ -43,16 +43,20 @@ def set_product(modeladmin, request, queryset):
         form = SetProductForm(request.POST)
         if form.is_valid():
             product = form.cleaned_data['new_product']
-            updated = 0
 
+            objs = []
+            now = timezone.now()
             for license in queryset:
-                license.product = product
-                license.save()
-                updated += 1
+                license.change_product(product, save=False)
+                license.updated_at = now
+                objs.append(license)
+
+            if objs:
+                License.objects.bulk_update(objs, ['product', 'updated_at'])
 
             messages.success(
                 request,
-                f"✅ {updated} licence(s) mise(s) à jour avec le produit « {product} »."
+                f"✅ {len(objs)} licence(s) mise(s) à jour avec le produit « {product} »."
             )
             return None
     else:
@@ -77,21 +81,42 @@ def bulk_update_dates(modeladmin, request, queryset):
 
             if action == 'extend':
                 days = form.cleaned_data['extension_days']
+                objs = []
+                now = timezone.now()
                 for license in queryset:
                     if license.expiry_date:
-                        license.expiry_date += timedelta(days=days)
-                        license.save()
-                        updated += 1
+                        license.extend_validity(days, save=False)
+                        license.updated_at = now
+                        objs.append(license)
+
+                if objs:
+                    License.objects.bulk_update(objs, ['expiry_date', 'status', 'updated_at'])
+                    updated = len(objs)
+
                 messages.success(request, f"✅ {updated} licence(s) prolongée(s) de {days} jours.")
 
             elif action == 'set_start':
+                # No business logic side effect on start_date, so queryset.update is fine and efficient
                 start_date = form.cleaned_data['start_date']
-                updated = queryset.update(start_date=start_date)
+                updated = queryset.update(start_date=start_date, updated_at=timezone.now())
                 messages.success(request, f"✅ {updated} licence(s) mise(s) à jour.")
 
             elif action == 'set_expiry':
+                # Setting expiry date affects status, so we must load and check logic
                 expiry_date = form.cleaned_data['expiry_date']
-                updated = queryset.update(expiry_date=expiry_date)
+
+                objs = []
+                now = timezone.now()
+                for license in queryset:
+                    license.expiry_date = expiry_date
+                    license._update_status_from_expiry()
+                    license.updated_at = now
+                    objs.append(license)
+
+                if objs:
+                    License.objects.bulk_update(objs, ['expiry_date', 'status', 'updated_at'])
+                    updated = len(objs)
+
                 messages.success(request, f"✅ {updated} licence(s) mise(s) à jour.")
 
             return None
@@ -115,17 +140,18 @@ def bulk_change_status(modeladmin, request, queryset):
         if form.is_valid():
             status = form.cleaned_data['new_status']
             comment = form.cleaned_data.get('comment')
-            updated = 0
 
+            objs = []
+            now = timezone.now()
             for license in queryset:
-                license.status = status
-                if comment:
-                    timestamp = timezone.now().strftime('%Y-%m-%d %H:%M')
-                    license.comment = (license.comment or '') + f"\n[{timestamp}] {comment}"
-                license.save()
-                updated += 1
+                license.change_status(status, comment, save=False)
+                license.updated_at = now
+                objs.append(license)
 
-            messages.success(request, f"✅ {updated} licence(s) mise(s) à jour.")
+            if objs:
+                License.objects.bulk_update(objs, ['status', 'comment', 'updated_at'])
+
+            messages.success(request, f"✅ {len(objs)} licence(s) mise(s) à jour.")
             return None
     else:
         form = BulkStatusForm()
@@ -142,18 +168,32 @@ bulk_change_status.short_description = "🔄 Changer le statut"
 
 
 def activate_licenses(modeladmin, request, queryset):
+    objs = []
+    now = timezone.now()
     for license in queryset:
-        license.status = 'active'
-        license.save()
+        license.activate(save=False)
+        license.updated_at = now
+        objs.append(license)
+
+    if objs:
+        License.objects.bulk_update(objs, ['status', 'updated_at'])
+
     messages.success(request, "✅ Licences activées.")
 
 activate_licenses.short_description = "✅ Activer"
 
 
 def suspend_licenses(modeladmin, request, queryset):
+    objs = []
+    now = timezone.now()
     for license in queryset:
-        license.status = 'suspended'
-        license.save()
+        license.suspend(save=False)
+        license.updated_at = now
+        objs.append(license)
+
+    if objs:
+        License.objects.bulk_update(objs, ['status', 'updated_at'])
+
     messages.warning(request, "⚠️ Licences suspendues.")
 
 suspend_licenses.short_description = "⏸️ Suspendre"

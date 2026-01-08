@@ -1,6 +1,6 @@
 from django import forms
 from django.utils import timezone
-from .models import Product
+from .models import Product, License
 
 class SetProductForm(forms.Form):
     new_product = forms.ModelChoiceField(
@@ -8,6 +8,19 @@ class SetProductForm(forms.Form):
         label="Nouveau produit",
         empty_label="--- Sélectionner un produit ---",
         required=True,
+    )
+
+
+class BulkStatusForm(forms.Form):
+    new_status = forms.ChoiceField(
+        choices=License.STATUS,
+        label="Nouveau statut",
+        required=True,
+    )
+    comment = forms.CharField(
+        label="Commentaire (optionnel)",
+        widget=forms.Textarea(attrs={'rows': 3}),
+        required=False,
     )
 
 
