@@ -1,0 +1,134 @@
+Watching for file changes with StatReloader
+Error: That port is already in use.
+[08/Jan/2026 15:47:51] "GET /license-app/import-mapping/ HTTP/1.1" 302 0
+[08/Jan/2026 15:47:51] "GET /admin/login/?next=/license-app/import-mapping/ HTTP/1.1" 200 11751
+[08/Jan/2026 15:47:51] "GET /static/unfold/fonts/inter/styles.css HTTP/1.1" 200 608
+[08/Jan/2026 15:47:51] "GET /static/unfold/js/app.js HTTP/1.1" 200 19203
+[08/Jan/2026 15:47:51] "GET /static/unfold/css/styles.css HTTP/1.1" 200 228973
+[08/Jan/2026 15:47:51] "GET /static/unfold/fonts/material-symbols/styles.css HTTP/1.1" 200 164
+[08/Jan/2026 15:47:51] "GET /static/unfold/js/htmx/htmx.js HTTP/1.1" 200 50918
+[08/Jan/2026 15:47:51] "GET /static/unfold/css/simplebar/simplebar.css HTTP/1.1" 200 4647
+[08/Jan/2026 15:47:51] "GET /static/unfold/js/chart/chart.js HTTP/1.1" 200 200633
+[08/Jan/2026 15:47:51] "GET /static/unfold/js/simplebar/simplebar.js HTTP/1.1" 200 27176
+[08/Jan/2026 15:47:51] "GET /static/unfold/js/alpine/alpine.anchor.js HTTP/1.1" 200 15524
+[08/Jan/2026 15:47:51] "GET /static/unfold/js/alpine/alpine.persist.js HTTP/1.1" 200 837
+[08/Jan/2026 15:47:51] "GET /static/unfold/js/alpine/alpine.resize.js HTTP/1.1" 200 703
+[08/Jan/2026 15:47:51] "GET /static/unfold/js/alpine/alpine.js HTTP/1.1" 200 44758
+[08/Jan/2026 15:47:51] "GET /static/unfold/js/alpine/alpine.sort.js HTTP/1.1" 200 37891
+[08/Jan/2026 15:47:51] "GET /static/unfold/fonts/inter/Inter-SemiBold.woff2 HTTP/1.1" 200 114812
+[08/Jan/2026 15:47:51] "GET /static/unfold/fonts/inter/Inter-Regular.woff2 HTTP/1.1" 200 111268
+[08/Jan/2026 15:47:51] "GET /static/unfold/fonts/material-symbols/Material-Symbols-Outlined.woff2 HTTP/1.1" 200 291696
+[08/Jan/2026 15:47:51] "GET /static/unfold/fonts/inter/Inter-Medium.woff2 HTTP/1.1" 200 114348
+[08/Jan/2026 15:48:22] "GET /license-app/import-mapping/ HTTP/1.1" 302 0
+[08/Jan/2026 15:48:22] "GET /admin/login/?next=/license-app/import-mapping/ HTTP/1.1" 200 11751
+[08/Jan/2026 15:48:22] "GET /static/unfold/css/simplebar/simplebar.css HTTP/1.1" 200 4647
+[08/Jan/2026 15:48:22] "GET /static/unfold/fonts/material-symbols/styles.css HTTP/1.1" 200 164
+[08/Jan/2026 15:48:22] "GET /static/unfold/fonts/inter/styles.css HTTP/1.1" 200 608
+[08/Jan/2026 15:48:22] "GET /static/unfold/js/htmx/htmx.js HTTP/1.1" 200 50918
+[08/Jan/2026 15:48:22] "GET /static/unfold/css/styles.css HTTP/1.1" 200 228973
+[08/Jan/2026 15:48:22] "GET /static/unfold/js/app.js HTTP/1.1" 200 19203
+[08/Jan/2026 15:48:22] "GET /static/unfold/js/simplebar/simplebar.js HTTP/1.1" 200 27176
+[08/Jan/2026 15:48:22] "GET /static/unfold/js/chart/chart.js HTTP/1.1" 200 200633
+[08/Jan/2026 15:48:22] "GET /static/unfold/js/alpine/alpine.anchor.js HTTP/1.1" 200 15524
+[08/Jan/2026 15:48:22] "GET /static/unfold/js/alpine/alpine.sort.js HTTP/1.1" 200 37891
+[08/Jan/2026 15:48:22] "GET /static/unfold/js/alpine/alpine.persist.js HTTP/1.1" 200 837
+[08/Jan/2026 15:48:22] "GET /static/unfold/js/alpine/alpine.resize.js HTTP/1.1" 200 703
+[08/Jan/2026 15:48:22] "GET /static/unfold/js/alpine/alpine.js HTTP/1.1" 200 44758
+[08/Jan/2026 15:48:22] "GET /static/unfold/fonts/inter/Inter-SemiBold.woff2 HTTP/1.1" 200 114812
+[08/Jan/2026 15:48:22] "GET /static/unfold/fonts/material-symbols/Material-Symbols-Outlined.woff2 HTTP/1.1" 200 291696
+[08/Jan/2026 15:48:22] "GET /static/unfold/fonts/inter/Inter-Medium.woff2 HTTP/1.1" 200 114348
+[08/Jan/2026 15:48:22] "GET /static/unfold/fonts/inter/Inter-Regular.woff2 HTTP/1.1" 200 111268
+[08/Jan/2026 15:49:34] "GET /license-app/import-mapping/ HTTP/1.1" 302 0
+[08/Jan/2026 15:49:34] "GET /admin/login/?next=/license-app/import-mapping/ HTTP/1.1" 200 11751
+[08/Jan/2026 15:49:34] "GET /static/unfold/fonts/material-symbols/styles.css HTTP/1.1" 200 164
+[08/Jan/2026 15:49:34] "GET /static/unfold/fonts/inter/styles.css HTTP/1.1" 200 608
+[08/Jan/2026 15:49:34] "GET /static/unfold/css/simplebar/simplebar.css HTTP/1.1" 200 4647
+[08/Jan/2026 15:49:34] "GET /static/unfold/js/app.js HTTP/1.1" 200 19203
+[08/Jan/2026 15:49:34] "GET /static/unfold/js/chart/chart.js HTTP/1.1" 200 200633
+[08/Jan/2026 15:49:34] "GET /static/unfold/css/styles.css HTTP/1.1" 200 228973
+[08/Jan/2026 15:49:34] "GET /static/unfold/js/simplebar/simplebar.js HTTP/1.1" 200 27176
+[08/Jan/2026 15:49:34] "GET /static/unfold/js/htmx/htmx.js HTTP/1.1" 200 50918
+[08/Jan/2026 15:49:34] "GET /static/unfold/js/alpine/alpine.anchor.js HTTP/1.1" 200 15524
+[08/Jan/2026 15:49:34] "GET /static/unfold/js/alpine/alpine.resize.js HTTP/1.1" 200 703
+[08/Jan/2026 15:49:34] "GET /static/unfold/js/alpine/alpine.persist.js HTTP/1.1" 200 837
+[08/Jan/2026 15:49:34] "GET /static/unfold/js/alpine/alpine.js HTTP/1.1" 200 44758
+[08/Jan/2026 15:49:34] "GET /static/unfold/js/alpine/alpine.sort.js HTTP/1.1" 200 37891
+[08/Jan/2026 15:49:34] "GET /static/unfold/fonts/inter/Inter-Regular.woff2 HTTP/1.1" 200 111268
+[08/Jan/2026 15:49:34] "GET /static/unfold/fonts/inter/Inter-Medium.woff2 HTTP/1.1" 200 114348
+[08/Jan/2026 15:49:34] "GET /static/unfold/fonts/inter/Inter-SemiBold.woff2 HTTP/1.1" 200 114812
+[08/Jan/2026 15:49:34] "GET /static/unfold/fonts/material-symbols/Material-Symbols-Outlined.woff2 HTTP/1.1" 200 291696
+[08/Jan/2026 15:50:12] "GET /license-app/import-mapping/ HTTP/1.1" 302 0
+[08/Jan/2026 15:50:12] "GET /admin/login/?next=/license-app/import-mapping/ HTTP/1.1" 200 11751
+[08/Jan/2026 15:50:13] "GET /static/unfold/css/simplebar/simplebar.css HTTP/1.1" 200 4647
+[08/Jan/2026 15:50:13] "GET /static/unfold/fonts/material-symbols/styles.css HTTP/1.1" 200 164
+[08/Jan/2026 15:50:13] "GET /static/unfold/js/htmx/htmx.js HTTP/1.1" 200 50918
+[08/Jan/2026 15:50:13] "GET /static/unfold/fonts/inter/styles.css HTTP/1.1" 200 608
+[08/Jan/2026 15:50:13] "GET /static/unfold/js/app.js HTTP/1.1" 200 19203
+[08/Jan/2026 15:50:13] "GET /static/unfold/css/styles.css HTTP/1.1" 200 228973
+[08/Jan/2026 15:50:13] "GET /static/unfold/js/chart/chart.js HTTP/1.1" 200 200633
+[08/Jan/2026 15:50:13] "GET /static/unfold/js/simplebar/simplebar.js HTTP/1.1" 200 27176
+[08/Jan/2026 15:50:13] "GET /static/unfold/js/alpine/alpine.anchor.js HTTP/1.1" 200 15524
+[08/Jan/2026 15:50:13] "GET /static/unfold/js/alpine/alpine.persist.js HTTP/1.1" 200 837
+[08/Jan/2026 15:50:13] "GET /static/unfold/js/alpine/alpine.resize.js HTTP/1.1" 200 703
+[08/Jan/2026 15:50:13] "GET /static/unfold/js/alpine/alpine.sort.js HTTP/1.1" 200 37891
+[08/Jan/2026 15:50:13] "GET /static/unfold/js/alpine/alpine.js HTTP/1.1" 200 44758
+[08/Jan/2026 15:50:13] "GET /static/unfold/fonts/inter/Inter-SemiBold.woff2 HTTP/1.1" 200 114812
+[08/Jan/2026 15:50:13] "GET /static/unfold/fonts/inter/Inter-Medium.woff2 HTTP/1.1" 200 114348
+[08/Jan/2026 15:50:13] "GET /static/unfold/fonts/material-symbols/Material-Symbols-Outlined.woff2 HTTP/1.1" 200 291696
+[08/Jan/2026 15:50:13] "GET /static/unfold/fonts/inter/Inter-Regular.woff2 HTTP/1.1" 200 111268
+[08/Jan/2026 15:50:13] "GET /admin/login/ HTTP/1.1" 200 11717
+[08/Jan/2026 15:50:14] "POST /admin/login/ HTTP/1.1" 200 12561
+[08/Jan/2026 15:50:14] "GET /license-app/import-mapping/ HTTP/1.1" 302 0
+[08/Jan/2026 15:50:14] "GET /admin/login/?next=/license-app/import-mapping/ HTTP/1.1" 200 11751
+[08/Jan/2026 15:50:14] "GET /admin/login/ HTTP/1.1" 200 11717
+[08/Jan/2026 15:50:16] "POST /admin/login/ HTTP/1.1" 302 0
+Not Found: /accounts/profile/
+[08/Jan/2026 15:50:16] "GET /accounts/profile/ HTTP/1.1" 404 2390
+[08/Jan/2026 15:50:16] "GET /license-app/import-mapping/ HTTP/1.1" 200 6623
+[08/Jan/2026 15:50:16] "POST /license-app/import-mapping/ HTTP/1.1" 200 8960
+[08/Jan/2026 15:50:16] "GET /static/unfold/fonts/inter/Inter-Bold.woff2 HTTP/1.1" 200 114840
+/app/license_app/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+January 08, 2026 - 15:46:24
+Django version 6.0.1, using settings 'license_manager.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+
+WARNING: This is a development server. Do not use it in a production setting. Use a production WSGI or ASGI server instead.
+For more information on production servers see: https://docs.djangoproject.com/en/6.0/howto/deployment/
+Watching for file changes with StatReloader
+[08/Jan/2026 15:51:18] "GET /license-app/import-mapping/ HTTP/1.1" 302 0
+[08/Jan/2026 15:51:18] "GET /admin/login/?next=/license-app/import-mapping/ HTTP/1.1" 200 11751
+[08/Jan/2026 15:51:18] "GET /static/unfold/js/htmx/htmx.js HTTP/1.1" 200 50918
+[08/Jan/2026 15:51:18] "GET /static/unfold/fonts/material-symbols/styles.css HTTP/1.1" 200 164
+[08/Jan/2026 15:51:18] "GET /static/unfold/css/styles.css HTTP/1.1" 200 228973
+[08/Jan/2026 15:51:18] "GET /static/unfold/css/simplebar/simplebar.css HTTP/1.1" 200 4647
+[08/Jan/2026 15:51:18] "GET /static/unfold/js/chart/chart.js HTTP/1.1" 200 200633
+[08/Jan/2026 15:51:18] "GET /static/unfold/fonts/inter/styles.css HTTP/1.1" 200 608
+[08/Jan/2026 15:51:18] "GET /static/unfold/js/app.js HTTP/1.1" 200 19203
+[08/Jan/2026 15:51:18] "GET /static/unfold/js/simplebar/simplebar.js HTTP/1.1" 200 27176
+[08/Jan/2026 15:51:18] "GET /static/unfold/js/alpine/alpine.anchor.js HTTP/1.1" 200 15524
+[08/Jan/2026 15:51:18] "GET /static/unfold/js/alpine/alpine.resize.js HTTP/1.1" 200 703
+[08/Jan/2026 15:51:18] "GET /static/unfold/js/alpine/alpine.sort.js HTTP/1.1" 200 37891
+[08/Jan/2026 15:51:18] "GET /static/unfold/js/alpine/alpine.persist.js HTTP/1.1" 200 837
+[08/Jan/2026 15:51:18] "GET /static/unfold/js/alpine/alpine.js HTTP/1.1" 200 44758
+[08/Jan/2026 15:51:18] "GET /static/unfold/fonts/inter/Inter-SemiBold.woff2 HTTP/1.1" 200 114812
+[08/Jan/2026 15:51:18] "GET /static/unfold/fonts/inter/Inter-Medium.woff2 HTTP/1.1" 200 114348
+[08/Jan/2026 15:51:18] "GET /static/unfold/fonts/material-symbols/Material-Symbols-Outlined.woff2 HTTP/1.1" 200 291696
+[08/Jan/2026 15:51:18] "GET /static/unfold/fonts/inter/Inter-Regular.woff2 HTTP/1.1" 200 111268
+[08/Jan/2026 15:51:18] "GET /admin/login/ HTTP/1.1" 200 11717
+[08/Jan/2026 15:51:19] "POST /admin/login/ HTTP/1.1" 200 12561
+[08/Jan/2026 15:51:19] "GET /license-app/import-mapping/ HTTP/1.1" 302 0
+[08/Jan/2026 15:51:19] "GET /admin/login/?next=/license-app/import-mapping/ HTTP/1.1" 200 11751
+[08/Jan/2026 15:51:19] "GET /admin/login/ HTTP/1.1" 200 11717
+[08/Jan/2026 15:51:21] "POST /admin/login/ HTTP/1.1" 302 0
+Not Found: /accounts/profile/
+[08/Jan/2026 15:51:21] "GET /accounts/profile/ HTTP/1.1" 404 2390
+[08/Jan/2026 15:51:21] "GET /license-app/import-mapping/ HTTP/1.1" 200 6623
+[08/Jan/2026 15:51:21] "POST /license-app/import-mapping/ HTTP/1.1" 200 9164
+[08/Jan/2026 15:51:21] "GET /static/unfold/fonts/inter/Inter-Bold.woff2 HTTP/1.1" 200 114840
+/app/license_app/views.py:44: FutureWarning: Passing literal json to 'read_json' is deprecated and will be removed in a future version. To read from a literal string, wrap it in a 'StringIO' object.
+  df = pd.read_json(df_json)
+[08/Jan/2026 15:51:21] "POST /license-app/import-mapping/ HTTP/1.1" 200 6977

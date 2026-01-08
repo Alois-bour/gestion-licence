@@ -6,35 +6,32 @@ from django.contrib import admin, messages
 from django.contrib.admin.helpers import ACTION_CHECKBOX_NAME
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
 
-from import_export import resources
-from import_export.admin import ImportExportModelAdmin
+from unfold.admin import ModelAdmin
 
-from .models import License, Product
-from .forms import BulkUpdateDatesForm, SetProductForm
+from .models import License, Product, Customer, ClientType
+from .forms import BulkUpdateDatesForm, SetProductForm, BulkStatusForm
 
 
-class LicenseResource(resources.ModelResource):
-    class Meta:
-        model = License
-        fields = (
-            'id',
-            'license_number',
-            'customer',
-            'product',
-            'start_date',
-            'expiry_date',
-            'status',
-            'comment',
-            'created_at',
-            'updated_at',
+class ExpiresSoonFilter(admin.SimpleListFilter):
+    title = _('expiration status')
+    parameter_name = 'expires_soon'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('yes', _('Yes')),
+            ('no', _('No')),
         )
-        export_order = fields
-        import_id_fields = ['license_number']
-        skip_unchanged = True
-        report_skipped = True
+
+    def queryset(self, request, queryset):
+        if self.value() == 'yes':
+            return queryset.filter(expiry_date__lte=timezone.now().date() + timedelta(days=30), expiry_date__gte=timezone.now().date())
+        if self.value() == 'no':
+            return queryset.exclude(expiry_date__lte=timezone.now().date() + timedelta(days=30), expiry_date__gte=timezone.now().date())
 
 
 def set_product(modeladmin, request, queryset):
@@ -85,12 +82,18 @@ def bulk_update_dates(modeladmin, request, queryset):
 
             elif action == 'set_start':
                 start_date = form.cleaned_data['start_date']
-                updated = queryset.update(start_date=start_date)
+                for license in queryset:
+                    license.start_date = start_date
+                    license.save()
+                    updated += 1
                 messages.success(request, f"✅ {updated} licence(s) mise(s) à jour.")
 
             elif action == 'set_expiry':
                 expiry_date = form.cleaned_data['expiry_date']
-                updated = queryset.update(expiry_date=expiry_date)
+                for license in queryset:
+                    license.expiry_date = expiry_date
+                    license.save()
+                    updated += 1
                 messages.success(request, f"✅ {updated} licence(s) mise(s) à jour.")
 
             return None
@@ -165,16 +168,17 @@ def export_selected_to_csv(modeladmin, request, queryset):
 
     writer = csv.writer(response)
     writer.writerow([
-        'Numéro', 'Client', 'Produit', 'Début', 'Expiration', 'Statut', 'Jours restants'
+        'Numéro', 'Client', 'Type de client', 'Produit', 'Début', 'Expiration', 'Statut', 'Jours restants'
     ])
 
-    queryset = queryset.select_related('product')
+    queryset = queryset.select_related('product', 'customer', 'customer__client_type')
 
     for license in queryset:
         writer.writerow([
             license.license_number,
-            license.customer,
-            license.product,
+            license.customer.name,
+            license.customer.client_type.name if license.customer.client_type else '',
+            license.product.name if license.product else '',
             license.start_date,
             license.expiry_date,
             license.get_status_display(),
@@ -187,8 +191,8 @@ export_selected_to_csv.short_description = "📥 Exporter en CSV"
 
 
 @admin.register(License)
-class LicenseAdmin(ImportExportModelAdmin):
-    resource_class = LicenseResource
+class LicenseAdmin(ModelAdmin):
+    change_list_template = "admin/license_changelist.html"
 
     list_display = (
         'license_number_display',
@@ -197,6 +201,7 @@ class LicenseAdmin(ImportExportModelAdmin):
         'start_date',
         'expiry_date_display',
         'status_badge',
+        'is_expiring_soon',
         'expiry_status',
         'created_at',
     )
@@ -204,12 +209,14 @@ class LicenseAdmin(ImportExportModelAdmin):
     list_filter = (
         'status',
         'product',
+        'customer__client_type',
+        ExpiresSoonFilter,
         ('expiry_date', admin.DateFieldListFilter),
     )
 
     search_fields = (
         'license_number',
-        'customer',
+        'customer__name',
         'product__name',
         'comment',
     )
@@ -268,9 +275,17 @@ class LicenseAdmin(ImportExportModelAdmin):
 
 
 @admin.register(Product)
-class ProductAdmin(admin.ModelAdmin):
+class ProductAdmin(ModelAdmin):
     list_display = ('name', 'description')
     search_fields = ('name',)
 
+@admin.register(Customer)
+class CustomerAdmin(ModelAdmin):
+    list_display = ('name', 'client_type')
+    search_fields = ('name',)
+    list_filter = ('client_type',)
 
-
+@admin.register(ClientType)
+class ClientTypeAdmin(ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)

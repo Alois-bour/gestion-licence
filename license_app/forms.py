@@ -1,6 +1,6 @@
 from django import forms
 from django.utils import timezone
-from .models import Product
+from .models import Product, License
 
 class SetProductForm(forms.Form):
     new_product = forms.ModelChoiceField(
@@ -67,3 +67,16 @@ class BulkUpdateDatesForm(forms.Form):
             self.add_error('expiry_date', "Ce champ est obligatoire.")
 
         return cleaned
+
+class BulkStatusForm(forms.Form):
+    new_status = forms.ChoiceField(
+        choices=License.STATUS,
+        label="Nouveau statut",
+        required=True,
+    )
+    comment = forms.CharField(
+        widget=forms.Textarea,
+        label="Commentaire (optionnel)",
+        required=False,
+        help_text="Ce commentaire sera ajouté à la suite des commentaires existants.",
+    )
