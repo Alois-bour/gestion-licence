@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
 from datetime import timedelta
 
 class ClientType(models.Model):
@@ -18,6 +19,7 @@ class Customer(models.Model):
     name = models.CharField(max_length=150, unique=True, verbose_name="Nom")
     email = models.EmailField(verbose_name="Email", blank=True, null=True)
     client_type = models.ForeignKey(ClientType, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Type de client")
+    users = models.ManyToManyField(User, related_name='customers', blank=True, verbose_name="Utilisateurs associés")
 
     def __str__(self):
         return self.name

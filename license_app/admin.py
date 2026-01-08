@@ -280,6 +280,7 @@ class CustomerAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'client_type')
     search_fields = ('name', 'email')
     list_filter = ('client_type',)
+    filter_horizontal = ('users',)
 
 @admin.register(ClientType)
 class ClientTypeAdmin(admin.ModelAdmin):
