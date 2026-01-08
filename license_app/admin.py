@@ -12,7 +12,7 @@ from django.utils.html import format_html
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
-from .models import License, Product
+from .models import License, Product, Customer, ClientType
 from .forms import BulkUpdateDatesForm, SetProductForm
 
 
@@ -274,3 +274,14 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 
+
+@admin.register(Customer)
+class CustomerAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'client_type')
+    search_fields = ('name', 'email')
+    list_filter = ('client_type',)
+
+@admin.register(ClientType)
+class ClientTypeAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ('name',)
