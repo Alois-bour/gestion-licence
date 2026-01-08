@@ -1,0 +1,43 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<h1>Import Licenses with Manual Mapping</h1>
+
+{% if headers %}
+<form method="post">
+    {% csrf_token %}
+    <h2>Step 2: Map Columns to Fields</h2>
+    <p>Map the columns from your file to the corresponding fields in the License model.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>File Header</th>
+                <th>License Model Field</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for header in headers %}
+            <tr>
+                <td>{{ header }}</td>
+                <td>
+                    <select name="mapping-{{ forloop.counter0 }}">
+                        <option value="">--- Select Field ---</option>
+                        {% for field in model_fields %}
+                        <option value="{{ field }}">{{ field }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button type="submit" name="mapping">Import Data</button>
+</form>
+{% else %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <h2>Step 1: Upload File</h2>
+    <input type="file" name="file" accept=".xls,.xlsx">
+    <button type="submit">Upload and Map Columns</button>
+</form>
+{% endif %}
+{% endblock %}

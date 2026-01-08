@@ -3,6 +3,27 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 from datetime import timedelta
 
+class ClientType(models.Model):
+    name = models.CharField(max_length=100, unique=True, verbose_name="Nom du type de client")
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Type de client"
+        verbose_name_plural = "Types de client"
+
+class Customer(models.Model):
+    name = models.CharField(max_length=150, verbose_name="Nom du client")
+    client_type = models.ForeignKey(ClientType, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Type de client")
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Client"
+        verbose_name_plural = "Clients"
+
 class Product(models.Model):
     name = models.CharField(max_length=100, unique=True, verbose_name="Nom du produit")
     description = models.TextField(blank=True, null=True, verbose_name="Description")
@@ -24,7 +45,7 @@ class License(models.Model):
     ]
     
     license_number = models.CharField(max_length=64, unique=True, verbose_name="Numéro de licence")
-    customer = models.CharField(max_length=150, verbose_name="Client")
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, verbose_name="Client")
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Produit")
     start_date = models.DateField(null=True, blank=True, verbose_name="Date de début")
     expiry_date = models.DateField(null=True, blank=True, verbose_name="Date d'expiration")
@@ -86,3 +107,10 @@ class License(models.Model):
             return f"🟢 Expire dans {days} jours"
     
     expiry_status.short_description = "État d'expiration"
+
+    def is_expiring_soon(self):
+        """Vérifie si la licence expire dans les 30 prochains jours."""
+        days = self.days_until_expiry()
+        return days is not None and 0 <= days <= 30
+    is_expiring_soon.boolean = True
+    is_expiring_soon.short_description = "Expire bientôt ?"
