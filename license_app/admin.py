@@ -13,8 +13,10 @@ from simple_history.admin import SimpleHistoryAdmin
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
+from django.core.mail import send_mail
+from django.conf import settings
 from .models import License, Product, Customer, ClientType
-from .forms import BulkUpdateDatesForm, SetProductForm
+from .forms import BulkUpdateDatesForm, SetProductForm, BulkStatusForm, BulkEmailForm
 
 
 class LicenseResource(resources.ModelResource):
@@ -83,6 +85,17 @@ def bulk_update_dates(modeladmin, request, queryset):
                         license.save()
                         updated += 1
                 messages.success(request, f"✅ {updated} licence(s) prolongée(s) de {days} jours.")
+
+            elif action == 'renew_year':
+                for license in queryset:
+                    if license.expiry_date:
+                        license.expiry_date += timedelta(days=365)
+                    else:
+                        license.expiry_date = timezone.now().date() + timedelta(days=365)
+                    license.status = 'active'
+                    license.save()
+                    updated += 1
+                messages.success(request, f"✅ {updated} licence(s) renouvelée(s) pour 1 an.")
 
             elif action == 'set_start':
                 start_date = form.cleaned_data['start_date']
@@ -158,6 +171,54 @@ def suspend_licenses(modeladmin, request, queryset):
 
 suspend_licenses.short_description = "⏸️ Suspendre"
 
+def send_bulk_email(modeladmin, request, queryset):
+    if 'apply' in request.POST:
+        form = BulkEmailForm(request.POST)
+        if form.is_valid():
+            subject = form.cleaned_data['subject']
+            body_template = form.cleaned_data['body']
+            sent_count = 0
+
+            for license in queryset:
+                if license.customer.email:
+                    # Simple context replacement
+                    context = {
+                        'license_number': license.license_number,
+                        'product': license.product.name if license.product else '',
+                        'expiry_date': str(license.expiry_date),
+                        'customer_name': license.customer.name,
+                    }
+                    body = body_template
+                    for key, value in context.items():
+                        body = body.replace(f"{{{{ {key} }}}}", str(value))
+
+                    try:
+                        send_mail(
+                            subject,
+                            body,
+                            settings.DEFAULT_FROM_EMAIL,
+                            [license.customer.email],
+                            fail_silently=False,
+                        )
+                        sent_count += 1
+                    except Exception as e:
+                        messages.error(request, f"Erreur d'envoi à {license.customer}: {e}")
+
+            messages.success(request, f"✅ {sent_count} email(s) envoyé(s).")
+            return None
+    else:
+        form = BulkEmailForm()
+
+    return render(request, 'admin/license_app/bulk_email_form.html', {
+        'form': form,
+        'queryset': queryset,
+        'action_checkbox_name': ACTION_CHECKBOX_NAME,
+        'opts': modeladmin.model._meta,
+        'title': "Envoyer un email en masse",
+    })
+
+send_bulk_email.short_description = "📧 Envoyer un email"
+
 def export_selected_to_csv(modeladmin, request, queryset):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = (
@@ -225,6 +286,7 @@ class LicenseAdmin(ImportExportModelAdmin, SimpleHistoryAdmin):
         bulk_change_status,
         activate_licenses,
         suspend_licenses,
+        send_bulk_email,
         export_selected_to_csv,
     ]
 

@@ -14,11 +14,13 @@ class SetProductForm(forms.Form):
 class BulkUpdateDatesForm(forms.Form):
 
     ACTION_EXTEND = 'extend'
+    ACTION_RENEW_YEAR = 'renew_year'
     ACTION_SET_START = 'set_start'
     ACTION_SET_EXPIRY = 'set_expiry'
 
     ACTION_CHOICES = (
-        (ACTION_EXTEND, "➕ Prolonger la date d'expiration"),
+        (ACTION_EXTEND, "➕ Prolonger la date d'expiration (jours)"),
+        (ACTION_RENEW_YEAR, "🔄 Renouveler pour 1 an (+365 jours)"),
         (ACTION_SET_START, "📅 Définir la date de début"),
         (ACTION_SET_EXPIRY, "⏰ Définir la date d'expiration"),
     )
@@ -67,3 +69,39 @@ class BulkUpdateDatesForm(forms.Form):
             self.add_error('expiry_date', "Ce champ est obligatoire.")
 
         return cleaned
+
+
+class BulkStatusForm(forms.Form):
+    STATUS_CHOICES = [
+        ("active", "Active"),
+        ("expired", "Expirée"),
+        ("suspended", "Suspendue"),
+        ("pending", "En attente"),
+    ]
+
+    new_status = forms.ChoiceField(
+        choices=STATUS_CHOICES,
+        label="Nouveau statut",
+        required=True
+    )
+
+    comment = forms.CharField(
+        label="Commentaire (optionnel)",
+        widget=forms.Textarea(attrs={'rows': 2}),
+        required=False
+    )
+
+
+class BulkEmailForm(forms.Form):
+    subject = forms.CharField(
+        label="Sujet",
+        max_length=200,
+        required=True
+    )
+
+    body = forms.CharField(
+        label="Message",
+        widget=forms.Textarea(attrs={'rows': 10}),
+        required=True,
+        help_text="Variables: {{ license_number }}, {{ product }}, {{ expiry_date }}, {{ customer_name }}"
+    )

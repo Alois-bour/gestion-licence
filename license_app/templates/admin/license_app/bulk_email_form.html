@@ -1,0 +1,112 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static %}
+
+{% block extrahead %}
+    {{ block.super }}
+    {{ media }}
+    <style>
+        .action-form {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .selected-items {
+            background: white;
+            padding: 15px;
+            border-left: 4px solid #417690;
+            margin: 15px 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .form-section {
+            background: white;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        .form-actions {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+        .button.submit {
+            background: #417690;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .button.submit:hover {
+            background: #2e5668;
+        }
+        .button.cancel-link {
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-block;
+            margin-left: 10px;
+        }
+        .help-text {
+            color: #6c757d;
+            font-size: 0.9em;
+            margin-top: 5px;
+            font-family: monospace;
+        }
+    </style>
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Accueil' %}</a>
+    &rsaquo; <a href="{% url 'admin:license_app_license_changelist' %}">Licences</a>
+    &rsaquo; Envoi d'email en masse
+</div>
+{% endblock %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+<div class="action-form">
+    <div class="selected-items">
+        <h3>📧 Destinataires ({{ queryset.count }})</h3>
+        <ul>
+            {% for obj in queryset %}
+                <li>
+                    <strong>{{ obj.license_number }}</strong> - {{ obj.customer }}
+                    {% if obj.customer.email %}
+                        <span style="color: #28a745;">({{ obj.customer.email }})</span>
+                    {% else %}
+                        <span style="color: #dc3545;">(Pas d'email)</span>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-section">
+            <h3>✉️ Rédaction du message</h3>
+            {{ form.as_p }}
+        </div>
+
+        {% for obj in queryset %}
+            <input type="hidden" name="{{ action_checkbox_name }}" value="{{ obj.pk }}" />
+        {% endfor %}
+
+        <input type="hidden" name="action" value="send_bulk_email" />
+
+        <div class="form-actions">
+            <input type="submit" name="apply" value="🚀 Envoyer les emails" class="button submit" />
+            <a href="{% url 'admin:license_app_license_changelist' %}" class="button cancel-link">❌ Annuler</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
