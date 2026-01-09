@@ -10,7 +10,7 @@ from django.utils import timezone
 from django.utils.html import format_html
 
 from simple_history.admin import SimpleHistoryAdmin
-from import_export import resources
+from import_export import resources, fields, widgets
 from import_export.admin import ImportExportModelAdmin
 
 from .models import License, Product, Customer, ClientType
@@ -18,6 +18,17 @@ from .forms import BulkUpdateDatesForm, SetProductForm, BulkStatusForm
 
 
 class LicenseResource(resources.ModelResource):
+    customer = fields.Field(
+        column_name='customer',
+        attribute='customer',
+        widget=widgets.ForeignKeyWidget(Customer, field='name')
+    )
+    product = fields.Field(
+        column_name='product',
+        attribute='product',
+        widget=widgets.ForeignKeyWidget(Product, field='name')
+    )
+
     class Meta:
         model = License
         fields = (
