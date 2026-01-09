@@ -17,16 +17,24 @@ from .models import License, Product, Customer, ClientType
 from .forms import BulkUpdateDatesForm, SetProductForm, BulkStatusForm
 
 
+class GetOrCreateForeignKeyWidget(widgets.ForeignKeyWidget):
+    def clean(self, value, row=None, *args, **kwargs):
+        if not value:
+            return None
+        instance, created = self.model.objects.get_or_create(**{self.field: value})
+        return instance
+
+
 class LicenseResource(resources.ModelResource):
     customer = fields.Field(
         column_name='customer',
         attribute='customer',
-        widget=widgets.ForeignKeyWidget(Customer, field='name')
+        widget=GetOrCreateForeignKeyWidget(Customer, field='name')
     )
     product = fields.Field(
         column_name='product',
         attribute='product',
-        widget=widgets.ForeignKeyWidget(Product, field='name')
+        widget=GetOrCreateForeignKeyWidget(Product, field='name')
     )
 
     class Meta:
