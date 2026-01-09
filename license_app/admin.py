@@ -245,6 +245,38 @@ def export_selected_to_csv(modeladmin, request, queryset):
 
 export_selected_to_csv.short_description = "📥 Exporter en CSV"
 
+def check_duplicates_action(modeladmin, request, queryset):
+    """
+    Vérifie si des licences actives existent en double pour le même couple (Client, Produit).
+    """
+    from django.db.models import Count
+
+    # On cherche les doublons parmi TOUTES les licences, pas juste celles sélectionnées
+    # car un doublon peut être hors de la sélection.
+    # On filtre sur les statuts pertinents (par ex. 'active')
+    duplicates = (
+        License.objects.filter(status='active')
+        .values('customer', 'product')
+        .annotate(count=Count('id'))
+        .filter(count__gt=1)
+    )
+
+    count = duplicates.count()
+    if count == 0:
+        messages.success(request, "✅ Aucun doublon détecté (Client + Produit) parmi les licences actives.")
+    else:
+        msg = f"⚠️ {count} cas de doublons détectés (Client + Produit) :\n"
+        for d in duplicates[:5]: # Limit display
+            cust = Customer.objects.get(pk=d['customer'])
+            prod = Product.objects.get(pk=d['product'])
+            msg += f"- {cust.name} / {prod.name} ({d['count']} licences)\n"
+        if count > 5:
+            msg += "... et autres."
+
+        messages.warning(request, msg)
+
+check_duplicates_action.short_description = "🔍 Vérifier les doublons"
+
 
 @admin.register(License)
 class LicenseAdmin(ImportExportModelAdmin, SimpleHistoryAdmin):
@@ -285,6 +317,7 @@ class LicenseAdmin(ImportExportModelAdmin, SimpleHistoryAdmin):
         activate_licenses,
         suspend_licenses,
         export_selected_to_csv,
+        check_duplicates_action,
     ]
 
     fieldsets = (

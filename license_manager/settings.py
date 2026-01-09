@@ -134,3 +134,74 @@ LOGOUT_REDIRECT_URL = 'login'
 # Email Configuration
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'admin@licensemanager.local'
+
+# Unfold Admin Configuration
+UNFOLD = {
+    "SITE_TITLE": "License Manager",
+    "SITE_HEADER": "License Manager Admin",
+    "SITE_URL": "/",
+    "DASHBOARD_CALLBACK": "license_app.views.dashboard_callback",
+    "COLORS": {
+        "primary": {
+            "50": "250 250 250",
+            "100": "244 245 247",
+            "200": "229 231 235",
+            "300": "209 213 219",
+            "400": "156 163 175",
+            "500": "107 114 128",
+            "600": "75 85 99",
+            "700": "55 65 81",
+            "800": "31 41 55",
+            "900": "17 24 39",
+        },
+    },
+    "SIDEBAR": {
+        "show_search": True,
+        "show_all_applications": True,
+        "navigation": [
+            {
+                "title": "Navigation",
+                "separator": True,
+                "items": [
+                    {
+                        "title": "Tableau de bord",
+                        "icon": "dashboard",
+                        "link": "admin:index",
+                    },
+                ],
+            },
+            {
+                "title": "Licences",
+                "separator": True,
+                "items": [
+                    {
+                        "title": "Licences",
+                        "icon": "verified",
+                        "link": "admin:license_app_license_changelist",
+                    },
+                    {
+                        "title": "Produits",
+                        "icon": "inventory_2",
+                        "link": "admin:license_app_product_changelist",
+                    },
+                ],
+            },
+            {
+                "title": "Clients",
+                "separator": True,
+                "items": [
+                    {
+                        "title": "Clients",
+                        "icon": "group",
+                        "link": "admin:license_app_customer_changelist",
+                    },
+                    {
+                        "title": "Types de clients",
+                        "icon": "category",
+                        "link": "admin:license_app_clienttype_changelist",
+                    },
+                ],
+            },
+        ],
+    },
+}

@@ -11,3 +11,14 @@ def dashboard(request):
     licenses = License.objects.filter(customer__users=request.user).select_related('product', 'customer').order_by('expiry_date')
 
     return render(request, 'license_app/dashboard.html', {'licenses': licenses})
+
+def dashboard_callback(request, context):
+    """
+    Callback for Django Unfold dashboard context.
+    """
+    context.update({
+        'total_licenses': License.objects.count(),
+        'active_licenses': License.objects.filter(status='active').count(),
+        'expired_licenses': License.objects.filter(status='expired').count(),
+    })
+    return context
